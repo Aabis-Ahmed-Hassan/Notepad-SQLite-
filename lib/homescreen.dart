@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sqlite/db_handler.dart';
 import 'package:sqlite/modal_class.dart';
 
+import 'add_data.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -10,128 +12,66 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _nameController = TextEditingController();
-  final _ageController = TextEditingController();
-  int x = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
         title: Text('SQLite'),
       ),
-      body: Column(
-        children: [
-          TextFormField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              hintText: 'Enter Your Name',
+      body: FutureBuilder(
+        future: DBHandler().readData(),
+        builder: (context, AsyncSnapshot<List<ModalClass>> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    snapshot.data![index].name +
+                        '     ' +
+                        snapshot.data![index].id.toString(),
+                  ),
+                  subtitle: Text(
+                    snapshot.data![index].age.toString(),
+                  ),
+                  trailing: IconButton(
+                    onPressed: () async {
+                      await DBHandler().deleteData(
+                        int.parse(
+                          snapshot.data![index].id.toString(),
+                        ),
+                      );
+                      setState(() {});
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddData(),
             ),
+          );
+        },
+        child: Center(
+          child: Icon(
+            Icons.add,
           ),
-          TextFormField(
-            controller: _ageController,
-            decoration: InputDecoration(
-              hintText: 'Enter Your Age',
-            ),
-          ),
-          //insert
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                Colors.blue,
-              ),
-            ),
-            onPressed: () async {
-              x++;
-              await DBHandler().insertData(
-                ModalClass(
-                  name: _nameController.text,
-                  age: int.parse(_ageController.text),
-                ),
-              );
-            },
-            child: Center(
-              child: Text(
-                'Insert',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
-              ),
-            ),
-          ),
-          //read
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                Colors.blue,
-              ),
-            ),
-            onPressed: () async {
-              List<ModalClass> myList = await DBHandler().readData();
-              int y = 2;
-              print(myList[y].id);
-              print(myList[y].name);
-              print(myList[y].age);
-            },
-            child: Center(
-              child: Text(
-                'Read',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
-              ),
-            ),
-          ),
-          //update
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                Colors.blue,
-              ),
-            ),
-            onPressed: () async {
-              await DBHandler().updateData(
-                ModalClass(
-                  id: x,
-                  name: 'Updated Name',
-                  age: 12,
-                ),
-              );
-              print('data updated');
-            },
-            child: Center(
-              child: Text(
-                'Update',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
-              ),
-            ),
-          ),
-          //delete
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                Colors.blue,
-              ),
-            ),
-            onPressed: () async {
-              await DBHandler().deleteData(2);
-              print('data deleted');
-            },
-            child: Center(
-              child: Text(
-                'Delete',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

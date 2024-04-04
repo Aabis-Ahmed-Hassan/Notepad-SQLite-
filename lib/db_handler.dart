@@ -28,16 +28,16 @@ class DBHandler {
     return _database!;
   }
 
-  insertData(ModalClass modalClass) async {
+  Future<int> insertData(ModalClass modalClass) async {
     Database db = await database;
 
-    await db.insert(
+    return await db.insert(
       '$myTable',
       modalClass.toMap(),
     );
   }
 
-  readData() async {
+  Future<List<ModalClass>> readData() async {
     Database _db = await database;
 
     List myList = await _db.query('$myTable');
@@ -46,9 +46,9 @@ class DBHandler {
     }).toList();
   }
 
-  updateData(ModalClass modalClass) async {
+  Future<int> updateData(ModalClass modalClass) async {
     Database db = await database;
-    await db.update(
+    return await db.update(
       '$myTable',
       modalClass.toMap(),
       where: 'id = ?',
@@ -56,12 +56,9 @@ class DBHandler {
     );
   }
 
-  deleteData(int id) async {
+  Future<int> deleteData(int id) async {
     Database db = await database;
 
-    await db.delete(
-      myTable,
-      // where: 'id = ?', whereArgs: [id]
-    );
+    return await db.delete(myTable, where: 'id = ?', whereArgs: [id]);
   }
 }
