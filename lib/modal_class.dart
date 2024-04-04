@@ -1,10 +1,10 @@
 class ModalClass {
-  int id;
+  int? id;
   String name;
   int age;
 
   ModalClass({
-    required this.id,
+    this.id,
     required this.name,
     required this.age,
   });

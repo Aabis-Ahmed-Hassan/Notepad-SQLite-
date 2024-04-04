@@ -10,15 +10,29 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _nameController = TextEditingController();
+  final _ageController = TextEditingController();
   int x = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Database Insert and Read Methods'),
+        title: Text('SQLite'),
       ),
       body: Column(
         children: [
+          TextFormField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              hintText: 'Enter Your Name',
+            ),
+          ),
+          TextFormField(
+            controller: _ageController,
+            decoration: InputDecoration(
+              hintText: 'Enter Your Age',
+            ),
+          ),
           //insert
           ElevatedButton(
             style: ButtonStyle(
@@ -30,9 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
               x++;
               await DBHandler().insertData(
                 ModalClass(
-                  id: x,
-                  name: 'Inserted Name',
-                  age: 12,
+                  name: _nameController.text,
+                  age: int.parse(_ageController.text),
                 ),
               );
             },
@@ -55,7 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onPressed: () async {
               List<ModalClass> myList = await DBHandler().readData();
-              print(myList[1].name);
+              int y = 2;
+              print(myList[y].id);
+              print(myList[y].name);
+              print(myList[y].age);
             },
             child: Center(
               child: Text(
