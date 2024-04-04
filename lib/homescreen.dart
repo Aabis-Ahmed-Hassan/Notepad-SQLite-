@@ -18,23 +18,90 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
+          //insert
           ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                Colors.blue,
+              ),
+            ),
             onPressed: () async {
               x++;
-              await DBHandler().insertData(
-                  DateTime.now().millisecondsSinceEpoch, '$x$x$x$x$x$x', x);
+              await DBHandler().insertData(x, 'Member $x', x * x);
             },
             child: Center(
-              child: Text('Insert'),
+              child: Text(
+                'Insert',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                ),
+              ),
             ),
           ),
+          //read
           ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                Colors.blue,
+              ),
+            ),
             onPressed: () async {
               List myList = await DBHandler().readData();
               print(myList);
             },
             child: Center(
-              child: Text('Insert'),
+              child: Text(
+                'Read',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                ),
+              ),
+            ),
+          ),
+          //update
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                Colors.blue,
+              ),
+            ),
+            onPressed: () async {
+              await DBHandler().updateData(
+                {'id': 1, 'name': 'Aabis Ahmed Hassan', 'age': 18},
+              );
+              print('data updated');
+            },
+            child: Center(
+              child: Text(
+                'Update',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                ),
+              ),
+            ),
+          ),
+          //delete
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                Colors.blue,
+              ),
+            ),
+            onPressed: () async {
+              await DBHandler().deleteData();
+              print('data deleted');
+            },
+            child: Center(
+              child: Text(
+                'Delete',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                ),
+              ),
             ),
           ),
         ],

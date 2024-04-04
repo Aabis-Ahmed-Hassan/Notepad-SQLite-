@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DBHandler {
   Database? _database;
-
+  String myTable = 'MYTABLE';
   Future<Database> get database async {
     if (_database != null) {
       return _database!;
@@ -16,7 +16,7 @@ class DBHandler {
 
     _database = await openDatabase(path, version: 1, onCreate: (db, version) {
       db.execute('''
-      CREATE TABLE MYTABLE (
+      CREATE TABLE $myTable (
       id INTEGER PRIMARY KEY,
       name TEXT,
       age INTEGER
@@ -35,13 +35,29 @@ class DBHandler {
       'name': name,
       'age': age,
     };
-    await db.insert('MYTABLE', myMap);
+    await db.insert('$myTable', myMap);
   }
 
   readData() async {
     Database _db = await database;
 
-    List myList = await _db.query('MYTABLE');
+    List myList = await _db.query('$myTable');
     return myList;
+  }
+
+  updateData(Map<String, dynamic> myMap) async {
+    Database db = await database;
+    await db.update(
+      '$myTable',
+      myMap,
+      where: 'id = ?',
+      whereArgs: [myMap['id']],
+    );
+  }
+
+  deleteData() async {
+    Database db = await database;
+
+    await db.delete(myTable);
   }
 }
