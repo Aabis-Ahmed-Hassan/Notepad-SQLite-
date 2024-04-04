@@ -55,9 +55,9 @@ class DBHandler {
     );
   }
 
-  deleteData() async {
+  deleteData(int id) async {
     Database db = await database;
 
-    await db.delete(myTable);
+    await db.delete(myTable, where: 'id = ?', whereArgs: [id]);
   }
 }

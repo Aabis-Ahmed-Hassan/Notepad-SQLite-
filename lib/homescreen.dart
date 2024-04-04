@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             onPressed: () async {
-              await DBHandler().deleteData();
+              await DBHandler().deleteData(2);
               print('data deleted');
             },
             child: Center(
