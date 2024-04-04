@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqlite/db_handler.dart';
+import 'package:sqlite/modal_class.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,7 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onPressed: () async {
               x++;
-              await DBHandler().insertData(x, 'Member $x', x * x);
+              await DBHandler().insertData(
+                ModalClass(
+                  id: x,
+                  name: 'Inserted Name',
+                  age: 12,
+                ),
+              );
             },
             child: Center(
               child: Text(
@@ -47,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             onPressed: () async {
-              List myList = await DBHandler().readData();
-              print(myList);
+              List<ModalClass> myList = await DBHandler().readData();
+              print(myList[1].name);
             },
             child: Center(
               child: Text(
@@ -69,7 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onPressed: () async {
               await DBHandler().updateData(
-                {'id': 1, 'name': 'Aabis Ahmed Hassan', 'age': 18},
+                ModalClass(
+                  id: x,
+                  name: 'Updated Name',
+                  age: 12,
+                ),
               );
               print('data updated');
             },
