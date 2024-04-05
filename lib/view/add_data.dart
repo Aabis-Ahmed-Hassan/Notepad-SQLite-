@@ -16,9 +16,6 @@ class AddData extends StatefulWidget {
 class _AddDataState extends State<AddData> {
   DBHelper _db = DBHelper();
 
-
-
-
   @override
   final _titleController = TextEditingController();
   final _subtitleController = TextEditingController();
@@ -72,7 +69,7 @@ class _AddDataState extends State<AddData> {
             TextFormField(
               controller: _subtitleController,
               decoration: InputDecoration(
-                hintText: 'Enter your subtitle',
+                hintText: 'Enter your note',
               ),
             ),
             SizedBox(height: 35),
@@ -86,7 +83,6 @@ class _AddDataState extends State<AddData> {
                   ),
                 )
                     .then((value) {
-                  Utils.showSnackBar(context, 'Note Added');
                   Navigator.push(
                     context,
                     MaterialPageRoute(

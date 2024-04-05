@@ -24,7 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'Notepad',
+          // 'Notepad',
+          'SQLite',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w500,
@@ -170,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
               TextFormField(
                 controller: _subtitleController,
                 decoration: InputDecoration(
-                  label: Text('Subtitle'),
+                  label: Text('Note'),
                 ),
               ),
             ],
@@ -195,7 +196,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     .then((value) {
                   setState(() {});
 
-                  Utils.showSnackBar(context, 'Done');
                   Navigator.pop(context);
                   _titleController.text = '';
                   _subtitleController.text = '';
