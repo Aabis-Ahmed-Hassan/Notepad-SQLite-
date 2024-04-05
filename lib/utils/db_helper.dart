@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqlite/modals/modal.dart';
 
 class DBHelper {
   Database? _database;
@@ -25,15 +26,32 @@ class DBHelper {
     return _database!;
   }
 
-  Future<int> insertData(Map<String, dynamic> myData) async {
+  Future<int> insertData(ModalClass modalClass) async {
     Database _db = await database;
-    return await _db.insert(myTable, myData);
+    return await _db.insert(
+      myTable,
+      modalClass.toMap(),
+    );
   }
 
-  Future<List> readData() async {
+  Future<List<ModalClass>> readData() async {
     Database _db = await database;
 
     List myNotes = await _db.query(myTable);
-    return myNotes;
+
+    return myNotes.map((map) => ModalClass.fromMap(map)).toList();
+  }
+
+  Future<int> updateData(ModalClass modalClass) async {
+    Database _db = await database;
+
+    return await _db.update(myTable, modalClass.toMap(),
+        whereArgs: [modalClass.id], where: 'id = ?');
+  }
+
+  Future<int> deleteData(int id) async {
+    Database _db = await database;
+
+    return await _db.delete(myTable, where: 'id = ?', whereArgs: [id]);
   }
 }
